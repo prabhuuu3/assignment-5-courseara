@@ -59,3 +59,177 @@ app.controller('LoginController', function ($scope) {
 
 
 prog 3
+<html>
+
+<head>
+  <title>Calculator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</head>
+
+<body>
+  <div ng-app="callApp" ng-controller="calCtrl">
+    <h1>Calculator App</h1>
+    <input type="number" placeholder="Enter first number" ng-model="num1">
+    <input type="number" placeholder="Enter second number" ng-model="num2">
+    <select ng-model="operator">
+      <option value="+">+</option>
+      <option value="-">-</option>
+      <option value="*">*</option>
+      <option value="/">/</option>
+    </select>
+    
+    <button ng-click="calculate()">Calculate</button>
+    <p>Result of Operation:{{result}}</p>
+  </div>
+
+  <script>
+    var app = angular.module("callApp", []);
+    app.controller("calCtrl", function ($scope) {
+      $scope.num1 = 0;
+      $scope.num2 = 0;
+      $scope.operator = 0;
+      $scope.result = 0;
+      $scope.calculate = function () {
+        switch ($scope.operator) {
+          case '+':
+            $scope.result = $scope.num1 + $scope.num2;
+            break;
+          case '-':
+            $scope.result = $scope.num1 - $scope.num2;
+            break;
+          case '*':
+            $scope.result = $scope.num1 * $scope.num2;
+            break;
+          case '/':
+            $scope.result = $scope.num1 / $scope.num2;
+            break;
+        }
+      };
+    });
+  </script>
+</body>
+
+</html>
+
+
+
+
+prog 4
+<html>
+<head>
+  <title>Ajs factorial and square calculator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</head>
+<body>
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <h1>Factorial and Square Calculator</h1>
+    <input type="number" placeholder="Enter a number" ng-model="number">
+    <button ng-click="calculateFactorial()">Calculate Factorial</button>
+    <button ng-click="calculateSquare()">Calculate Square</button>
+    <p>Factorial: {{factorial}}</p>
+    <p>Square: {{square}}</p>
+  </div>
+
+  <script>
+    var app = angular.module("myApp", []);
+    app.controller("myCtrl", function ($scope) {
+      $scope.number = 0;
+      $scope.factorial = 0;
+      $scope.square = 0;
+
+      $scope.calculateFactorial = function () {
+        var factorial = 1;
+        for (var i = $scope.number; i > 1; i--) {
+          factorial *= i;
+        }
+        $scope.factorial = factorial;
+      };
+
+      $scope.calculateSquare = function () {
+        $scope.square = $scope.number * $scope.number;
+      };
+    });
+  </script>
+</body>
+</html>
+
+
+
+prog6
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+  
+   
+    <title>Todo List Application</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</head>
+<body ng-controller="myController">
+    <div>
+        <h2>Todo List</h2>
+        <ul>
+            <li ng-repeat="task in tasks"> 
+                {{task.name}}
+                <button ng-click="editTask(task)">Edit Task</button>
+                <button ng-click="deleteTask(task)">Delete Task</button>
+            </li>
+        </ul>
+        <div>
+            <label>New Task: </label>
+            <input type="text" ng-model="newTaskName">
+            <button ng-click="addTask()">Add Task</button>
+        </div>
+        <div ng-show="editingTask">
+            <label>Edit Task: </label>
+            <input type="text" ng-model="editedTaskName">
+            <button ng-click="saveTask()">Save</button>
+            <button ng-click="cancelEdit()">Cancel</button>
+        </div>
+    </div>
+    <script src="aaa.js"></script>
+</body>
+</html>
+var app = angular.module('myApp', []);
+
+app.controller('myController', function ($scope) {
+    $scope.tasks = [
+        { name: 'Attend Class' },
+        { name: 'Complete Assignment' },
+        { name: 'Study for CIE' }
+    ];
+
+    $scope.newTaskName = '';
+    $scope.editingTask = null;
+    $scope.editedTaskName = '';
+
+    $scope.addTask = function () {
+        if ($scope.newTaskName) {
+            $scope.tasks.push({ name: $scope.newTaskName });
+            $scope.newTaskName = '';
+        }
+    };
+
+    $scope.editTask = function (task) {
+        $scope.editingTask = task;
+        $scope.editedTaskName = task.name;
+    };
+
+    $scope.saveTask = function () {
+        if ($scope.editingTask) {
+            $scope.editingTask.name = $scope.editedTaskName;
+            $scope.cancelEdit();
+        }
+    };
+
+    $scope.cancelEdit = function () {
+        $scope.editingTask = null;
+        $scope.editedTaskName = '';
+    };
+
+    $scope.deleteTask = function (task) {
+        var index = $scope.tasks.indexOf(task);
+        if (index !== -1) {
+            $scope.tasks.splice(index, 1);
+        }
+    };
+});
