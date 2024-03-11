@@ -1,37 +1,36 @@
-import java.util.Scanner;
-
-public class BucketAlgorithm {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter the bucket size: ");
-        int bucketSize = scanner.nextInt();
-
-        System.out.print("Enter the number of packets: ");
-        int numPackets = scanner.nextInt();
-
-        System.out.print("Enter the output rate: ");
-        int outputRate = scanner.nextInt();
-
-        System.out.println("\nPacket transmission:");
-
-        for (int i = 0; i < numPackets; i++) {
-            System.out.print("Packet " + (i + 1) + ": ");
-            int packetSize = scanner.nextInt();
-
-            if (packetSize <= bucketSize) {
-                int remaining = packetSize;
-                while (remaining > 0) {
-                    int sent = Math.min(remaining, outputRate);
-                    System.out.println("    Sent " + sent + " units");
-                    remaining -= sent;
-                }
-            } else {
-                System.out.println("    Packet overflow!");
-            }
-        }
-        scanner.close();
-    }
+import java.util.*;
+class pg12
+{
+public static void main(String args[])
+{
+Scanner sc=new Scanner(System.in);
+int i,size,nop,opr,temp=0;
+int[] datarate=new int[100];
+System.out.println("enter the bucket size");
+size=sc.nextInt();
+System.out.println("enter the number of packets");
+nop=sc.nextInt();
+System.out.println("enter the dara rate");
+for(i=0;i<nop;i++)
+datarate[i]=sc.nextInt();
+System.out.println("enter the output rate");
+opr=sc.nextInt();
+for(i=0;i<nop;i++)
+{
+if(datarate[i]>size)
+System.out.println("bucket overflow");
+else
+{
+temp=datarate[i];
+while(temp>opr)
+{
+System.out.println("packet transmission"+opr);
+temp=temp-opr;
+}
+System.out.println("packet transmission"+temp);
+}
+}
+}
 }
 
 
