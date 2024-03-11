@@ -1,318 +1,97 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login Form with Validation</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-</head>
-<body ng-app="myApp">
+import java.util.Scanner;
 
-<div ng-controller="LoginController">
-    <h2>Login Form</h2>
+public class BucketAlgorithm {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-    <form name="loginForm" novalidate>
-        <label>Username:</label>
-        <input type="text" ng-model="user.username" name="username" required>
-        <span ng-show="loginForm.username.$error.required && loginForm.username.$dirty">Username is required.</span>
-        <br>
+        System.out.print("Enter the bucket size: ");
+        int bucketSize = scanner.nextInt();
 
-        <label>Password:</label>
-        <input type="password" ng-model="user.password" name="password" ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/" required>
+        System.out.print("Enter the number of packets: ");
+        int numPackets = scanner.nextInt();
 
-        <span ng-show="loginForm.password.$error.required && loginForm.password.$dirty">Password is required.</span>
+        System.out.print("Enter the output rate: ");
+        int outputRate = scanner.nextInt();
 
-        <span ng-show="loginForm.password.$error.pattern && loginForm.password.$dirty">
-            Password must be alphanumeric and at least 8 characters long.
-        </span>
-        <br>
+        System.out.println("\nPacket transmission:");
 
-        <button ng-click="login()" ng-disabled="loginForm.$invalid">Login</button>
-    </form>
+        for (int i = 0; i < numPackets; i++) {
+            System.out.print("Packet " + (i + 1) + ": ");
+            int packetSize = scanner.nextInt();
 
-    <div ng-show="isLoggedIn">
-        <p>Login successful! Welcome, {{user.username}}!</p>
-    </div>
-</div>
-<script src="xxx.js"></script>
-</body>
-</html>
-
-var app = angular.module('myApp', []);
-app.controller('LoginController', function ($scope) {
-    $scope.user = { username: '', password: '' };
-    $scope.isLoggedIn = false;
-    $scope.login = function () {
-        $scope.isLoggedIn = true;
-    };
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-prog 3
-<html>
-
-<head>
-  <title>Calculator</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-</head>
-
-<body>
-  <div ng-app="callApp" ng-controller="calCtrl">
-    <h1>Calculator App</h1>
-    <input type="number" placeholder="Enter first number" ng-model="num1">
-    <input type="number" placeholder="Enter second number" ng-model="num2">
-    <select ng-model="operator">
-      <option value="+">+</option>
-      <option value="-">-</option>
-      <option value="*">*</option>
-      <option value="/">/</option>
-    </select>
-    
-    <button ng-click="calculate()">Calculate</button>
-    <p>Result of Operation:{{result}}</p>
-  </div>
-
-  <script>
-    var app = angular.module("callApp", []);
-    app.controller("calCtrl", function ($scope) {
-      $scope.num1 = 0;
-      $scope.num2 = 0;
-      $scope.operator = 0;
-      $scope.result = 0;
-      $scope.calculate = function () {
-        switch ($scope.operator) {
-          case '+':
-            $scope.result = $scope.num1 + $scope.num2;
-            break;
-          case '-':
-            $scope.result = $scope.num1 - $scope.num2;
-            break;
-          case '*':
-            $scope.result = $scope.num1 * $scope.num2;
-            break;
-          case '/':
-            $scope.result = $scope.num1 / $scope.num2;
-            break;
+            if (packetSize <= bucketSize) {
+                int remaining = packetSize;
+                while (remaining > 0) {
+                    int sent = Math.min(remaining, outputRate);
+                    System.out.println("    Sent " + sent + " units");
+                    remaining -= sent;
+                }
+            } else {
+                System.out.println("    Packet overflow!");
+            }
         }
-      };
-    });
-  </script>
-</body>
-
-</html>
+        scanner.close();
+    }
+}
 
 
 
 
-prog 4
-<html>
-<head>
-  <title>Ajs factorial and square calculator</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-</head>
-<body>
-  <div ng-app="myApp" ng-controller="myCtrl">
-    <h1>Factorial and Square Calculator</h1>
-    <input type="number" placeholder="Enter a number" ng-model="number">
-    <button ng-click="calculateFactorial()">Calculate Factorial</button>
-    <button ng-click="calculateSquare()">Calculate Square</button>
-    <p>Factorial: {{factorial}}</p>
-    <p>Square: {{square}}</p>
-  </div>
+                import java.util.Scanner;
 
-  <script>
-    var app = angular.module("myApp", []);
-    app.controller("myCtrl", function ($scope) {
-      $scope.number = 0;
-      $scope.factorial = 0;
-      $scope.square = 0;
+public class DVT {
+    public static void main(String args[]) {
+        Scanner scanner = new Scanner(System.in);
 
-      $scope.calculateFactorial = function () {
-        var factorial = 1;
-        for (var i = $scope.number; i > 1; i--) {
-          factorial *= i;
+        System.out.print("Enter the number of nodes: ");
+        int nodes = scanner.nextInt();
+
+        int[][] costMatrix = new int[nodes + 1][nodes + 1];
+
+        System.out.println("Enter the cost matrix:");
+        for (int i = 1; i <= nodes; i++) {
+            for (int j = 1; j <= nodes; j++) {
+                costMatrix[i][j] = scanner.nextInt();
+            }
         }
-        $scope.factorial = factorial;
-      };
 
-      $scope.calculateSquare = function () {
-        $scope.square = $scope.number * $scope.number;
-      };
-    });
-  </script>
-</body>
-</html>
+        int[][] dist = calculateShortestDistances(costMatrix, nodes);
 
+        printShortestDistances(dist, nodes);
+    }
 
+    private static int[][] calculateShortestDistances(int[][] costMatrix, int nodes) {
+        int[][] dist = new int[nodes + 1][nodes + 1];
+        int[][] from = new int[nodes + 1][nodes + 1];
 
-prog6
-<!DOCTYPE html>
-<html lang="en" ng-app="myApp">
-<head>
-  
-   
-    <title>Todo List Application</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-</head>
-<body ng-controller="myController">
-    <div>
-        <h2>Todo List</h2>
-        <ul>
-            <li ng-repeat="task in tasks"> 
-                {{task.name}}
-                <button ng-click="editTask(task)">Edit Task</button>
-                <button ng-click="deleteTask(task)">Delete Task</button>
-            </li>
-        </ul>
-        <div>
-            <label>New Task: </label>
-            <input type="text" ng-model="newTaskName">
-            <button ng-click="addTask()">Add Task</button>
-        </div>
-        <div ng-show="editingTask">
-            <label>Edit Task: </label>
-            <input type="text" ng-model="editedTaskName">
-            <button ng-click="saveTask()">Save</button>
-            <button ng-click="cancelEdit()">Cancel</button>
-        </div>
-    </div>
-    <script src="aaa.js"></script>
-</body>
-</html>
-var app = angular.module('myApp', []);
-
-app.controller('myController', function ($scope) {
-    $scope.tasks = [
-        { name: 'Attend Class' },
-        { name: 'Complete Assignment' },
-        { name: 'Study for CIE' }
-    ];
-
-    $scope.newTaskName = '';
-    $scope.editingTask = null;
-    $scope.editedTaskName = '';
-
-    $scope.addTask = function () {
-        if ($scope.newTaskName) {
-            $scope.tasks.push({ name: $scope.newTaskName });
-            $scope.newTaskName = '';
+        for (int i = 1; i <= nodes; i++) {
+            for (int j = 1; j <= nodes; j++) {
+                dist[i][j] = costMatrix[i][j];
+                from[i][j] = j;
+            }
         }
-    };
 
-    $scope.editTask = function (task) {
-        $scope.editingTask = task;
-        $scope.editedTaskName = task.name;
-    };
-
-    $scope.saveTask = function () {
-        if ($scope.editingTask) {
-            $scope.editingTask.name = $scope.editedTaskName;
-            $scope.cancelEdit();
+        for (int k = 1; k <= nodes; k++) {
+            for (int i = 1; i <= nodes; i++) {
+                for (int j = 1; j <= nodes; j++) {
+                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                        from[i][j] = k;
+                    }
+                }
+            }
         }
-    };
 
-    $scope.cancelEdit = function () {
-        $scope.editingTask = null;
-        $scope.editedTaskName = '';
-    };
+        return dist;
+    }
 
-    $scope.deleteTask = function (task) {
-        var index = $scope.tasks.indexOf(task);
-        if (index !== -1) {
-            $scope.tasks.splice(index, 1);
+    private static void printShortestDistances(int[][] dist, int nodes) {
+        for (int i = 1; i <= nodes; i++) {
+            System.out.println("\nFrom Router Node: " + i);
+            System.out.println("Desti Node\tNext-Hop\tDistance");
+            for (int j = 1; j <= nodes; j++) {
+                System.out.println(j + "\t\t" + dist[i][j]);
+            }
         }
-    };
-});
-
-
-
-prog6
-
-<!DOCTYPE html>
-<html lang="en" ng-app="myApp">
-<head>
-  
-   
-    <title>Todo List Application</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
-</head>
-<body ng-controller="myController">
-    <div>
-        <h2>Todo List</h2>
-        <ul>
-            <li ng-repeat="task in tasks"> 
-                {{task.name}}
-                <button ng-click="editTask(task)">Edit Task</button>
-                <button ng-click="deleteTask(task)">Delete Task</button>
-            </li>
-        </ul>
-        <div>
-            <label>New Task: </label>
-            <input type="text" ng-model="newTaskName">
-            <button ng-click="addTask()">Add Task</button>
-        </div>
-        <div ng-show="editingTask">
-            <label>Edit Task: </label>
-            <input type="text" ng-model="editedTaskName">
-            <button ng-click="saveTask()">Save</button>
-            <button ng-click="cancelEdit()">Cancel</button>
-        </div>
-    </div>
-    <script src="aaa.js"></script>
-</body>
-</html>
-var app = angular.module('myApp', []);
-
-app.controller('myController', function ($scope) {
-    $scope.tasks = [
-        { name: 'Attend Class' },
-        { name: 'Complete Assignment' },
-        { name: 'Study for CIE' }
-    ];
-
-    $scope.newTaskName = '';
-    $scope.editingTask = null;
-    $scope.editedTaskName = '';
-
-    $scope.addTask = function () {
-        if ($scope.newTaskName) {
-            $scope.tasks.push({ name: $scope.newTaskName });
-            $scope.newTaskName = '';
-        }
-    };
-
-    $scope.editTask = function (task) {
-        $scope.editingTask = task;
-        $scope.editedTaskName = task.name;
-    };
-
-    $scope.saveTask = function () {
-        if ($scope.editingTask) {
-            $scope.editingTask.name = $scope.editedTaskName;
-            $scope.cancelEdit();
-        }
-    };
-
-    $scope.cancelEdit = function () {
-        $scope.editingTask = null;
-        $scope.editedTaskName = '';
-    };
-
-    $scope.deleteTask = function (task) {
-        var index = $scope.tasks.indexOf(task);
-        if (index !== -1) {
-            $scope.tasks.splice(index, 1);
-        }
-    };
-});
-
+    }
+}
