@@ -1,96 +1,82 @@
-import java.util.*;
-class pg12
-{
-public static void main(String args[])
-{
-Scanner sc=new Scanner(System.in);
-int i,size,nop,opr,temp=0;
-int[] datarate=new int[100];
-System.out.println("enter the bucket size");
-size=sc.nextInt();
-System.out.println("enter the number of packets");
-nop=sc.nextInt();
-System.out.println("enter the dara rate");
-for(i=0;i<nop;i++)
-datarate[i]=sc.nextInt();
-System.out.println("enter the output rate");
-opr=sc.nextInt();
-for(i=0;i<nop;i++)
-{
-if(datarate[i]>size)
-System.out.println("bucket overflow");
-else
-{
-temp=datarate[i];
-while(temp>opr)
-{
-System.out.println("packet transmission"+opr);
-temp=temp-opr;
-}
-System.out.println("packet transmission"+temp);
-}
-}
-}
-}
+CREATE TABLE DEPARTMENT (DNO VARCHAR(10) PRIMARY KEY,DNAME VARCHAR(20),MGRSTARTDATE DATE);
+
+CREATE TABLE EMPLOYEE (SSN VARCHAR(10) PRIMARY KEY,SUPERSSN VARCHAR(10),DNO VARCHAR(10),FNAME VARCHAR(8),LNAME VARCHAR(8),ADDRESS VARCHAR(10),SEX CHAR(1),SALARY DECIMAL(10, 2),FOREIGN KEY (SUPERSSN) REFERENCES EMPLOYEE (SSN),FOREIGN KEY (DNO) REFERENCES DEPARTMENT (DNO));
+
+ALTER TABLE DEPARTMENTADD MGRSSN VARCHAR(10);
+
+ALTER TABLE DEPARTMENTADD CONSTRAINT fk_mgrssn FOREIGN KEY (MGRSSN) REFERENCES EMPLOYEE (SSN);
+
+CREATE TABLE DLOCATION (DNO VARCHAR(10),DLOC VARCHAR(10),PRIMARY KEY (DNO, DLOC),FOREIGN KEY (DNO) REFERENCES DEPARTMENT (DNO));
+
+CREATE TABLE PROJECT (PNO INT PRIMARY KEY,DNO VARCHAR(10),PNAME VARCHAR(20),PLOCATION VARCHAR(20),FOREIGN KEY (DNO) REFERENCES DEPARTMENT (DNO));
+
+CREATE TABLE WORKS_ON (HOURS INT,SSN VARCHAR(10),PNO INT,PRIMARY KEY (SSN, PNO),FOREIGN KEY (SSN) REFERENCES EMPLOYEE (SSN),FOREIGN KEY (PNO) REFERENCES PROJECT (PNO));
+
+
+/* 1. Make a list of all project numbers for projects that involve an employee whose last
+name is 'Scott', either as a worker or as a manager of the department that controls the
+project. */
+
+	SELECT DISTINCT P.PNO
+	FROM PROJECT P, DEPARTMENT D, EMPLOYEE E
+	WHERE P.DNO=D.DNO AND 
+		D.MGRSSN=E.SSN AND
+		E.LNAME='SCOTT'
+UNION
+	SELECT DISTINCT W.PNO
+	FROM WORKS_ON W, EMPLOYEE E1
+	WHERE	E1.SSN=W.SSN AND
+		E1.LNAME='SCOTT';
+
+
+/* 2. Show the resulting salaries if every employee working on the 'IoT’ project is given a 10
+percent raise. */
+
+SELECT E.FNAME, E.LNAME, 1.1*E.SALARY AS INCR_SAL
+FROM EMPLOYEE E, WORKS_ON W, PROJECT P
+WHERE E.SSN=W.SSN AND
+	W.PNO=P.PNO AND
+	P.PNAME='IOT';
+
+/* 3. Find the sum of the salaries of all employees of the 'Accounts’ department, as well as
+the maximum salary, the minimum salary, and the average salary in this department. */
+
+SELECT SUM (E.SALARY), MAX (E.SALARY), MIN (E.SALARY), AVG (E.SALARY)
+FROM EMPLOYEE E, DEPARTMENT D
+WHERE E.DNO=D.DNO AND
+	D.DNAME='ACCOUNTS';
+
+/* 4. Retrieve the name of each employee who works on all the projects Controlled by
+department number 5 (use NOT EXISTS operator). */
+
+SELECT E.FNAME, E.LNAME
+FROM EMPLOYEE E
+WHERE NOT EXISTS(
+		(SELECT PNO FROM PROJECT WHERE DNO=5) 
+		MINUS
+		(SELECT PNO FROM WORKS_ON WHERE E.SSN=SSN)
+	);
+
+
+/* 5. For each department that has more than five employees, retrieve the department
+number and the number of its employees who are making more than Rs. 6,00,000. */
+
+SELECT E.DNO, COUNT (E.SSN) as "No. oF Employees"
+FROM EMPLOYEE E
+WHERE	E.SALARY > 600000 AND
+	E.DNO IN (SELECT E1.DNO
+		  FROM EMPLOYEE E1
+		  GROUP BY E1.DNO
+		  HAVING COUNT (E1.DNO) > 5 )
+GROUP BY E.DNO;
 
 
 
 
-                import java.util.Scanner;
 
-public class DVT {
-    public static void main(String args[]) {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter the number of nodes: ");
-        int nodes = scanner.nextInt();
 
-        int[][] costMatrix = new int[nodes + 1][nodes + 1];
 
-        System.out.println("Enter the cost matrix:");
-        for (int i = 1; i <= nodes; i++) {
-            for (int j = 1; j <= nodes; j++) {
-                costMatrix[i][j] = scanner.nextInt();
-            }
-        }
 
-        int[][] dist = calculateShortestDistances(costMatrix, nodes);
 
-        printShortestDistances(dist, nodes);
-    }
-
-    private static int[][] calculateShortestDistances(int[][] costMatrix, int nodes) {
-        int[][] dist = new int[nodes + 1][nodes + 1];
-        int[][] from = new int[nodes + 1][nodes + 1];
-
-        for (int i = 1; i <= nodes; i++) {
-            for (int j = 1; j <= nodes; j++) {
-                dist[i][j] = costMatrix[i][j];
-                from[i][j] = j;
-            }
-        }
-
-        for (int k = 1; k <= nodes; k++) {
-            for (int i = 1; i <= nodes; i++) {
-                for (int j = 1; j <= nodes; j++) {
-                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
-                        dist[i][j] = dist[i][k] + dist[k][j];
-                        from[i][j] = k;
-                    }
-                }
-            }
-        }
-
-        return dist;
-    }
-
-    private static void printShortestDistances(int[][] dist, int nodes) {
-        for (int i = 1; i <= nodes; i++) {
-            System.out.println("\nFrom Router Node: " + i);
-            System.out.println("Desti Node\tNext-Hop\tDistance");
-            for (int j = 1; j <= nodes; j++) {
-                System.out.println(j + "\t\t" + dist[i][j]);
-            }
-        }
-    }
-}
+PROG 4
